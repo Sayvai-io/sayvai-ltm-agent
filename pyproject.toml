@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "travis"
+version = "0.1.0"
+description = ""
+authors = ["sanjaypranav <sanjaypriya195@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+langgraph = "^0.2.59"
+langchain = {extras = ["llms"], version = "^0.3.12"}
+langchain-openai = "^0.2.12"
+langchain-community = "^0.3.12"
+tiktoken = "^0.8.0"
+python-dotenv = "^1.0.1"
+fastapi = {extras = ["all"], version = "^0.115.6"}
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
