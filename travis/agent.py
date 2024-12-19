@@ -1,4 +1,5 @@
 import tiktoken
+import os
 from dotenv import load_dotenv
 from langchain.agents import agent
 from langchain_core.messages import get_buffer_string
@@ -8,11 +9,16 @@ from langgraph.checkpoint.memory import MemorySaver
 from langgraph.constants import END, START
 from langgraph.graph import StateGraph
 from langgraph.prebuilt import ToolNode
-
+from langfuse import Langfuse
+from langfuse.decorators import observe
 from travis.tools import save_recall_memory, search_recall_memories, search
 
 load_dotenv()
 from travis.utils import State, prompt, pretty_print_stream_chunk
+
+langfuse = Langfuse(
+    host=os.getenv("LANGFUSE_HOST"),
+)
 
 
 class LongTermMemoryAgent:
@@ -33,6 +39,7 @@ class LongTermMemoryAgent:
             self.tools
         )
 
+    @observe()
     def agent(self, state: State) -> State:
         """Process the current state and generate a response using the LLM.
 
@@ -103,6 +110,7 @@ class LongTermMemoryAgent:
         memory = MemorySaver()
         self.graph = builder.compile(checkpointer=memory)
 
+    @observe()
     def run(self, user_message: str, user_config: RunnableConfig):
         """
          Args:
@@ -115,10 +123,8 @@ class LongTermMemoryAgent:
             # print(chunk)
             # pretty_print_stream_chunk(chunk)
             if 'agent' in chunk.keys():
-                 yield chunk['agent']['messages'][-1].content
+                yield chunk['agent']['messages'][-1].content
         # return "done"
-
-
 
 # if __name__ == "__main__":
 #     agent = LongTermMemoryAgent(model_name="gpt-4o-mini")
@@ -127,4 +133,3 @@ class LongTermMemoryAgent:
 #     while True:
 #         message = input("Enter your message: ")
 #         print(agent.run(message, config))
-
