@@ -10,6 +10,7 @@ from langgraph.constants import END, START
 from langgraph.graph import StateGraph
 from langgraph.prebuilt import ToolNode
 from langfuse import Langfuse
+from langchain.llms import BaseLLM
 from langfuse.decorators import observe
 from travis.tools import save_recall_memory, search_recall_memories, search
 
@@ -28,7 +29,7 @@ class LongTermMemoryAgent:
                  model_name: str,
                  ):
         self.graph = None
-        self.model = ChatOpenAI(model_name=model_name)
+        self.model = self.get_llm(model=model_name)
         self.tokenizer = tiktoken.encoding_for_model(model_name)
         self.model_with_tools = self._bind_tools()
 
@@ -38,6 +39,22 @@ class LongTermMemoryAgent:
         return self.model.bind_tools(
             self.tools
         )
+    
+    def get_llm(self, model) -> BaseLLM:
+        """
+        Get the language model for the agent.
+        Args:
+            model: if groq use groq-modelname, openai use modelname, ollama if ollama-modelname
+
+        Returns:
+            BaseLLM: Language model for the agent.
+        """
+        if model[:3] == "gpt":
+            return ChatOpenAI(model=model, streaming=True)
+        if model[:4] == "groq":
+            return ChatGroq(model=model[5:], streaming=True)
+        if model[:6] == "ollama":
+            return ChatOllama(model=model[7:], streaming=True)
 
     @observe()
     def agent(self, state: State) -> State:
@@ -111,7 +128,7 @@ class LongTermMemoryAgent:
         self.graph = builder.compile(checkpointer=memory)
 
     @observe()
-    def run(self, user_message: str, user_config: RunnableConfig):
+    async def run(self, user_message: str, user_config: RunnableConfig):
         """
          Args:
             message (str): The user's message.
@@ -119,7 +136,7 @@ class LongTermMemoryAgent:
         :return:
         Text/Answer
         """
-        for chunk in self.graph.stream({"messages": [("user", user_message)]}, config=user_config):
+        async for chunk in self.graph.astream({"messages": [("user", user_message)]}, config=user_config):
             # print(chunk)
             # pretty_print_stream_chunk(chunk)
             if 'agent' in chunk.keys():
