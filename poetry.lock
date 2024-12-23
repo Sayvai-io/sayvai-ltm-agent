@@ -634,6 +634,25 @@ docs = ["Sphinx", "furo"]
 test = ["objgraph", "psutil"]
 
 [[package]]
+name = "groq"
+version = "0.13.1"
+description = "The official Python library for the groq API"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "groq-0.13.1-py3-none-any.whl", hash = "sha256:0c5d1d6df93de55de705fe73729b79baaa0c871f7575d6aa64b2962b56101b3e"},
+    {file = "groq-0.13.1.tar.gz", hash = "sha256:588fd5bee984f4eb46ec89552778d5698b9e9614435defef868645c19463cbcc"},
+]
+
+[package.dependencies]
+anyio = ">=3.5.0,<5"
+distro = ">=1.7.0,<2"
+httpx = ">=0.23.0,<1"
+pydantic = ">=1.9.0,<3"
+sniffio = "*"
+typing-extensions = ">=4.10,<5"
+
+[[package]]
 name = "h11"
 version = "0.14.0"
 description = "A pure-Python, bring-your-own-I/O implementation of HTTP/1.1"
@@ -722,13 +741,13 @@ test = ["Cython (>=0.29.24)"]
 
 [[package]]
 name = "httpx"
-version = "0.28.1"
+version = "0.27.2"
 description = "The next generation HTTP client."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "httpx-0.28.1-py3-none-any.whl", hash = "sha256:d909fcccc110f8c7faf814ca82a9a4d816bc5a6dbfea25d6591d6985b8ba59ad"},
-    {file = "httpx-0.28.1.tar.gz", hash = "sha256:75e98c5f16b0f35b567856f597f06ff2270a374470a5c2392242528e3e3e42fc"},
+    {file = "httpx-0.27.2-py3-none-any.whl", hash = "sha256:7bb2708e112d8fdd7829cd4243970f0c223274051cb35ee80c03301ee29a3df0"},
+    {file = "httpx-0.27.2.tar.gz", hash = "sha256:f7c2be1d2f3c3c3160d441802406b206c2b76f5947b11115e6df10c6c65e66c2"},
 ]
 
 [package.dependencies]
@@ -736,6 +755,7 @@ anyio = "*"
 certifi = "*"
 httpcore = "==1.*"
 idna = "*"
+sniffio = "*"
 
 [package.extras]
 brotli = ["brotli", "brotlicffi"]
@@ -957,13 +977,13 @@ tenacity = ">=8.1.0,<8.4.0 || >8.4.0,<10"
 
 [[package]]
 name = "langchain-core"
-version = "0.3.25"
+version = "0.3.28"
 description = "Building applications with LLMs through composability"
 optional = false
 python-versions = "<4.0,>=3.9"
 files = [
-    {file = "langchain_core-0.3.25-py3-none-any.whl", hash = "sha256:e10581c6c74ba16bdc6fdf16b00cced2aa447cc4024ed19746a1232918edde38"},
-    {file = "langchain_core-0.3.25.tar.gz", hash = "sha256:fdb8df41e5cdd928c0c2551ebbde1cea770ee3c64598395367ad77ddf9acbae7"},
+    {file = "langchain_core-0.3.28-py3-none-any.whl", hash = "sha256:a02f81ca53a8eed757133797e5a602ca80c1324bbecb0c5d86ef7bd3d6625372"},
+    {file = "langchain_core-0.3.28.tar.gz", hash = "sha256:407f7607e6b3c0ebfd6094da95d39b701e22e59966698ef126799782953e7f2c"},
 ]
 
 [package.dependencies]
@@ -977,6 +997,36 @@ pydantic = [
 PyYAML = ">=5.3"
 tenacity = ">=8.1.0,<8.4.0 || >8.4.0,<10.0.0"
 typing-extensions = ">=4.7"
+
+[[package]]
+name = "langchain-groq"
+version = "0.2.2"
+description = "An integration package connecting Groq and LangChain"
+optional = false
+python-versions = "<4.0,>=3.9"
+files = [
+    {file = "langchain_groq-0.2.2-py3-none-any.whl", hash = "sha256:227c9db26861894d2e310cb20190f35f3713765558976e929a48714a32431eef"},
+    {file = "langchain_groq-0.2.2.tar.gz", hash = "sha256:eefc938255aff869789d90785279b5b990ef08e1bc81150133d9a788285111c6"},
+]
+
+[package.dependencies]
+groq = ">=0.4.1,<1"
+langchain-core = ">=0.3.27,<0.4.0"
+
+[[package]]
+name = "langchain-ollama"
+version = "0.2.2"
+description = "An integration package connecting Ollama and LangChain"
+optional = false
+python-versions = "<4.0,>=3.9"
+files = [
+    {file = "langchain_ollama-0.2.2-py3-none-any.whl", hash = "sha256:8a1ee72dbb6ea3b3ace1d9dd317e472d667a8ed491328550da59f4893a6796f8"},
+    {file = "langchain_ollama-0.2.2.tar.gz", hash = "sha256:2d9bcb06ffdbe43c7c6906c46e710d36d33b6b99cd4975cbf54060f13e51c875"},
+]
+
+[package.dependencies]
+langchain-core = ">=0.3.27,<0.4.0"
+ollama = ">=0.4.4,<1"
 
 [[package]]
 name = "langchain-openai"
@@ -1476,6 +1526,21 @@ files = [
     {file = "numpy-2.2.0-pp310-pypy310_pp73-win_amd64.whl", hash = "sha256:df12a1f99b99f569a7c2ae59aa2d31724e8d835fc7f33e14f4792e3071d11221"},
     {file = "numpy-2.2.0.tar.gz", hash = "sha256:140dd80ff8981a583a60980be1a655068f8adebf7a45a06a6858c873fcdcd4a0"},
 ]
+
+[[package]]
+name = "ollama"
+version = "0.4.4"
+description = "The official Python client for Ollama."
+optional = false
+python-versions = "<4.0,>=3.8"
+files = [
+    {file = "ollama-0.4.4-py3-none-any.whl", hash = "sha256:0f466e845e2205a1cbf5a2fef4640027b90beaa3b06c574426d8b6b17fd6e139"},
+    {file = "ollama-0.4.4.tar.gz", hash = "sha256:e1db064273c739babc2dde9ea84029c4a43415354741b6c50939ddd3dd0f7ffb"},
+]
+
+[package.dependencies]
+httpx = ">=0.27.0,<0.28.0"
+pydantic = ">=2.9.0,<3.0.0"
 
 [[package]]
 name = "openai"
@@ -2910,4 +2975,4 @@ propcache = ">=0.2.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "fe9d47bc29ec9556b5414808400d87374f4d5e00d860885ced9a86fc343ec8d7"
+content-hash = "f7136a65283461e80b1562c4cce7edf7790029f979af43e2237438c4ee2b6bc5"
