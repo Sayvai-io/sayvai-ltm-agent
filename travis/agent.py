@@ -4,6 +4,8 @@ from dotenv import load_dotenv
 from langchain.agents import agent
 from langchain_core.messages import get_buffer_string
 from langchain_core.runnables import RunnableConfig
+from langchain_groq import ChatGroq
+from langchain_ollama import ChatOllama
 from langchain_openai import ChatOpenAI
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.constants import END, START
