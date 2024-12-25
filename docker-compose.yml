@@ -1,4 +1,4 @@
-version: '3.12'
+#version: '3.12'
 services:
   travis-backend:
     build:
@@ -42,7 +42,7 @@ services:
       - ./init-scripts/:/docker-entrypoint-initdb.d/
     networks:
       - app-network
-#    command: [ "postgres", "-c", "shared_preload_libraries=vector" ]
+    #    command: [ "postgres", "-c", "shared_preload_libraries=vector" ]
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U sayvai -d user-conversations" ]
       interval: 10s
@@ -62,6 +62,16 @@ services:
     networks:
       - app-network
 
+# frontend service
+  travis-frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    image: travis-frontend:latest
+    ports:
+      - "8501:8501"
+    depends_on:
+      - travis-backend
 networks:
   app-network:
     driver: bridge
