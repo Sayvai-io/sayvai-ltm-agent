@@ -1,0 +1,19 @@
+FROM python:3.12
+
+# Set the working directory
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y
+
+# Install Streamlit
+RUN pip install streamlit["all"]
+
+# Copy the Streamlit application
+ADD streamlit_app /app/streamlit_app
+
+# Expose Streamlit port
+EXPOSE 8501
+
+# Command to run Streamlit with logging level set to DEBUG
+CMD ["streamlit", "run", "streamlit_app/main.py", "--server.port", "8501", "--server.address", "0.0.0.0", "--logger.level=debug"]

@@ -32,6 +32,10 @@ def root():
 def chat(item: ChatConfig):
     config = {"configurable": {"user_id": item.user_id, "thread_id": item.thread_id}}
     return StreamingResponse(agent.run(item.question, config))
+
+@app.get("/health")
+def health():
+    return {"status": "healthy"}
     # return agent.run(item.question, config)
 
 
