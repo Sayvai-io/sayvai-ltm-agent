@@ -12,9 +12,9 @@ load_dotenv()
 
 
 class ChatConfig(BaseModel):
-    user_id: str = "1"
+    user_id: str 
     question: str
-    thread_id: str = "1"
+    thread_id: str 
 
 app = FastAPI(
     title="Sayvai Test API",
