@@ -140,8 +140,9 @@ class LongTermMemoryAgent:
         """
         from langchain_core.messages import AIMessageChunk, HumanMessage
 
-        async for msg, metadata in self.graph.astream({"messages": [("user", user_message)]}, config=user_config, stream_mode="messages"):
-            if msg.content and not isinstance(msg, HumanMessage):
+        async for msg, metadata in self.graph.astream({"messages": [("user", user_message)]}, config=user_config,
+                                                      stream_mode="messages"):
+            if isinstance(msg, AIMessageChunk):
                 yield msg.content
 
 

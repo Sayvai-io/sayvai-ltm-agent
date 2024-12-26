@@ -37,8 +37,8 @@ async def main(message: cl.Message):
                 for chunk in response.iter_raw():
                     if chunk:
                         text = chunk.decode('utf-8')
-                        msg.content = text
                         await msg.stream_token(text)
+                        cl.logger.info(f"Received chunk: {text}")
 
     except Exception as e:
         await cl.Message(content=f"Error: {str(e)}").send()
