@@ -23,12 +23,14 @@ def init_state():
 
 def fetch_response(user_id: str, question: str, thread_id: str, response_queue: queue.Queue):
     try:
+        logging.info(f'recieved user {user_id,thread_id}')
         response = requests.post(
             "http://travis-backend:8000/chat",
-            json={"user_id": user_id, "question": question, "thread_id": thread_id}
+            json={"user_id": user_id, "question": question, "thread_id": f'{user_id}_{thread_id}'}
         )
         response.raise_for_status()
         response_queue.put(response.text)
+
     except Exception as e:
         logging.error(f"Error fetching response: {e}")
         response_queue.put(f"Error: {str(e)}")
@@ -42,8 +44,8 @@ def main():
     st.title("Travis AI")
 
     with st.sidebar:
-        user_id = st.text_input("User ID", "Sanjaypranav")
-        thread_id = st.text_input("Thread ID", "1")
+        user_id = st.text_input("User ID")
+        thread_id = st.text_input("Thread ID")
 
     for msg in st.session_state.messages:
         with st.chat_message(msg["role"]):
