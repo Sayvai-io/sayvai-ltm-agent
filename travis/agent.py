@@ -138,11 +138,24 @@ class LongTermMemoryAgent:
         :return:
         Text/Answer
         """
-        async for chunk in self.graph.astream({"messages": [("user", user_message)]}, config=user_config):
-            # print(chunk)
-            # pretty_print_stream_chunk(chunk)
-            if 'agent' in chunk.keys():
-                yield chunk['agent']['messages'][-1].content
+        from langchain_core.messages import AIMessageChunk, HumanMessage
+
+        async for msg, metadata in self.graph.astream({"messages": [("user", user_message)]}, config=user_config, stream_mode="messages"):
+            if msg.content and not isinstance(msg, HumanMessage):
+                yield msg.content
+
+
+        # async for chunk in self.graph.astream({"messages": [("user", user_message)]}, config=user_config):
+        #     # print(chunk)
+        #     # pretty_print_stream_chunk(chunk)
+        #     for node, updates in chunk.items():
+        #         print(f"Update from node: {node}")
+        #         if "messages" in updates:
+        #             yield updates["messages"][-1].content
+                
+            
+            # if 'agent' in chunk.keys():
+            #     yield chunk['agent']['messages'][-1].content
         # return "done"
 
 # if __name__ == "__main__":
