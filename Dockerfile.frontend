@@ -1,19 +1,19 @@
 FROM python:3.12
 
-# Set the working directory
 WORKDIR /app
 
 # Install system dependencies
-RUN apt-get update && apt-get install -y
+RUN apt-get update && apt-get install -y 
 
-# Install Streamlit
-RUN pip install streamlit["all"]
+# Copy requirements and install dependencies
+RUN pip install chainlit pydantic==2.10.1 httpx 
 
-# Copy the Streamlit application
-ADD streamlit_app /app/streamlit_app
+# Copy application code
+COPY  frontend /app/frontend
+COPY frontend/chainlit.md /app/chainlit.md
 
-# Expose Streamlit port
+# Expose Chainlit port
 EXPOSE 8501
 
-# Command to run Streamlit with logging level set to DEBUG
-CMD ["streamlit", "run", "streamlit_app/main.py", "--server.port", "8501", "--server.address", "0.0.0.0", "--logger.level=debug"]
+# Run Chainlit
+CMD ["chainlit", "run", "frontend/chainlit.py", "--host", "0.0.0.0", "--port", "8501"]

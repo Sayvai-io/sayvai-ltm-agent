@@ -66,9 +66,9 @@ services:
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost"]
       interval: 200s
-      timeout: 5s
+      timeout: 50s
       retries: 3
-      start_period: 30s
+      start_period: 120s
 
   travis-frontend:
     build:
