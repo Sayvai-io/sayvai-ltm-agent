@@ -14,7 +14,7 @@ from langgraph.prebuilt import ToolNode
 from langfuse import Langfuse
 from langchain.llms import BaseLLM
 from langfuse.decorators import observe
-from travis.tools import save_recall_memory, search_recall_memories, search
+from travis.tools import save_recall_memory, search_recall_memories, search, get_date_time
 
 load_dotenv()
 from travis.utils import State, prompt, pretty_print_stream_chunk
@@ -37,7 +37,7 @@ class LongTermMemoryAgent:
 
     def _bind_tools(self):
         """Bind tools to the model."""
-        self.tools = [save_recall_memory, search_recall_memories, search]
+        self.tools = [save_recall_memory, search_recall_memories, search, get_date_time]
         return self.model.bind_tools(
             self.tools
         )

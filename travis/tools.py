@@ -2,6 +2,7 @@ import os
 import uuid
 from typing import List
 
+from datetime import datetime
 from langchain_community.tools import TavilySearchResults
 from langchain_postgres import PGVector
 from langchain_core.runnables import RunnableConfig
@@ -10,6 +11,7 @@ from langchain_core.tools import tool
 from langchain_openai import OpenAIEmbeddings
 from langchain_core.documents import Document
 from dotenv import load_dotenv
+
 load_dotenv()
 
 username = os.getenv("POSTGRES_USER", "sayvai")
@@ -30,7 +32,7 @@ try:
 except Exception as e:
     print(f"Failed to connect to vector store: {str(e)}")
     raise ValueError(f"Failed to connect to vector store. {str(e)}"
-)
+                     )
 
 
 def get_user_id(config: RunnableConfig) -> str:
@@ -39,6 +41,7 @@ def get_user_id(config: RunnableConfig) -> str:
         raise ValueError("User ID needs to be provided to save a memory.")
 
     return user_id
+
 
 # recall_vector_store = InMemoryVectorStore(OpenAIEmbeddings())
 
@@ -66,5 +69,12 @@ def search_recall_memories(query: str, config: RunnableConfig) -> List[str]:
     )
     return [document.page_content for document in documents]
 
-#3 tools are defined in this snippet: save_recall_memory, search_recall_memories, and search.
+@tool
+def get_date_time() -> str:
+    """Get the current date and time.
+    :return: Current date and time in the format "YYYY-MM-DD HH:MM:SS".
+    """
+    return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+# 3 tools are defined in this snippet: save_recall_memory, search_recall_memories, and search.
 search = TavilySearchResults(max_results=1)
